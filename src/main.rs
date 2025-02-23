@@ -3,13 +3,14 @@ mod game;
 mod input;
 mod renderer;
 
-use crossterm::style::Color;
+use crossterm::{style::Color, terminal::enable_raw_mode};
 use game::GameState;
 use input::{CrosstermEventPoller, Input, TerminalInputHandler};
 use renderer::Renderer;
 use std::time::Duration;
 
 fn main() -> Result<(), ()> {
+    enable_raw_mode();
     let config = config::GameConfig::new();
     let input_handler = TerminalInputHandler::new(CrosstermEventPoller::new());
     let mut renderer = Renderer::new(config.window_width, config.window_height)?;
@@ -25,9 +26,6 @@ fn main() -> Result<(), ()> {
         // Update game state
         game_state.handle_input(input);
         game_state.update();
-
-        // Render
-        renderer.clear()?;
 
         // Draw player
         renderer.draw_char(
@@ -61,8 +59,6 @@ fn main() -> Result<(), ()> {
         for (i, c) in score_text.chars().enumerate() {
             renderer.draw_char(i as u16, 0, c, Color::White)?;
         }
-
-        renderer.present()?;
     }
 
     Ok(())

@@ -29,16 +29,6 @@ impl Renderer {
         }
         Ok(())
     }
-
-    pub fn clear(&mut self) -> Result<(), ()> {
-        execute!(stdout(), Clear(ClearType::All));
-        Ok(())
-    }
-
-    pub fn present(&mut self) -> Result<(), ()> {
-        stdout().flush();
-        Ok(())
-    }
 }
 
 impl Drop for Renderer {
