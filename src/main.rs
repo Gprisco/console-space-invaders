@@ -1,3 +1,6 @@
+mod config;
+
 fn main() {
-    println!("Hello, world!");
+    let config = config::GameConfig::new();
+    println!("Game configuration loaded: {:?}", config);
 }
