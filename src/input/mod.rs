@@ -1,5 +1,17 @@
-use crossterm::event::{self, Event, KeyCode, KeyEvent};
+mod event_poller;
+
+use crossterm::event::{Event, KeyCode, KeyEvent};
 use std::time::Duration;
+
+pub use event_poller::CrosstermEventPoller;
+
+pub trait EventPoller {
+    fn poll(&self, timeout: Duration) -> bool;
+
+    // TODO: a good improvement would be to decouple
+    // this trait from crossterm::event::Event
+    fn read(&self) -> Result<Event, std::io::Error>;
+}
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum GameInput {
@@ -8,31 +20,6 @@ pub enum GameInput {
     Fire,
     Quit,
     None,
-}
-
-/// Trait for event polling functionality
-pub trait EventPoller {
-    fn poll(&self, timeout: Duration) -> bool;
-    fn read(&self) -> Result<Event, std::io::Error>;
-}
-
-/// Real implementation using crossterm library
-pub struct CrosstermEventPoller;
-
-impl CrosstermEventPoller {
-    pub fn new() -> Self {
-        Self
-    }
-}
-
-impl EventPoller for CrosstermEventPoller {
-    fn poll(&self, timeout: Duration) -> bool {
-        event::poll(timeout).unwrap_or(false)
-    }
-
-    fn read(&self) -> Result<Event, std::io::Error> {
-        event::read()
-    }
 }
 
 /// Trait defining the interface for input handling
@@ -74,17 +61,17 @@ mod tests {
     use super::*;
 
     struct MockEventPoller {
-        key_code: KeyCode,
+        key_code: Option<KeyCode>,
     }
 
     impl EventPoller for MockEventPoller {
         fn poll(&self, _timeout: Duration) -> bool {
-            true
+            self.key_code.is_some()
         }
 
         fn read(&self) -> Result<Event, std::io::Error> {
             Ok(Event::Key(KeyEvent::new(
-                self.key_code,
+                self.key_code.unwrap(),
                 crossterm::event::KeyModifiers::empty(),
             )))
         }
@@ -94,7 +81,7 @@ mod tests {
     fn test_input_with_mock_events() {
         // Given an event poller returning keycode left
         let event_poller = MockEventPoller {
-            key_code: KeyCode::Left,
+            key_code: Some(KeyCode::Left),
         };
         let input_handler = TerminalInputHandler::new(event_poller);
 
@@ -102,6 +89,19 @@ mod tests {
         assert_eq!(
             input_handler.poll_input(Duration::from_millis(1)),
             GameInput::Left
+        );
+    }
+
+    #[test]
+    fn test_input_with_no_event() {
+        // Given an event poller returning no keycode
+        let event_poller = MockEventPoller { key_code: None };
+        let input_handler = TerminalInputHandler::new(event_poller);
+
+        // Expect to poll GameInput::None
+        assert_eq!(
+            input_handler.poll_input(Duration::from_millis(1)),
+            GameInput::None
         );
     }
 }
