@@ -4,7 +4,7 @@ use crossterm::{
     style::{Color, Print, SetForegroundColor},
     terminal::{Clear, ClearType, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use std::io::stdout;
+use std::io::{Write, stdout};
 
 pub struct Renderer {
     width: u16,
@@ -27,6 +27,16 @@ impl Renderer {
         if x < self.width && y < self.height {
             execute!(stdout(), MoveTo(x, y), SetForegroundColor(color), Print(ch));
         }
+        Ok(())
+    }
+
+    pub fn clear(&mut self) -> Result<(), ()> {
+        execute!(stdout(), Clear(ClearType::All));
+        Ok(())
+    }
+
+    pub fn present(&mut self) -> Result<(), ()> {
+        stdout().flush();
         Ok(())
     }
 }
