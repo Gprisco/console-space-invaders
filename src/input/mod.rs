@@ -41,16 +41,16 @@ impl<T: EventPoller> TerminalInputHandler<T> {
 
 impl<T: EventPoller> Input for TerminalInputHandler<T> {
     fn poll_input(&self, timeout: Duration) -> GameInput {
-        if self.event_poller.poll(timeout) {
-            if let Ok(Event::Key(KeyEvent { code, .. })) = self.event_poller.read() {
-                return match code {
-                    KeyCode::Left => GameInput::Left,
-                    KeyCode::Right => GameInput::Right,
-                    KeyCode::Char(' ') => GameInput::Fire,
-                    KeyCode::Char('q') | KeyCode::Esc => GameInput::Quit,
-                    _ => GameInput::None,
-                };
-            }
+        if self.event_poller.poll(timeout)
+            && let Ok(Event::Key(KeyEvent { code, .. })) = self.event_poller.read()
+        {
+            return match code {
+                KeyCode::Left => GameInput::Left,
+                KeyCode::Right => GameInput::Right,
+                KeyCode::Char(' ') => GameInput::Fire,
+                KeyCode::Char('q') | KeyCode::Esc => GameInput::Quit,
+                _ => GameInput::None,
+            };
         }
         GameInput::None
     }

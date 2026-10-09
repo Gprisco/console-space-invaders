@@ -12,6 +12,7 @@ pub struct GameConfig {
     pub alien_rows: u16,
     pub alien_columns: u16,
     pub alien_symbol: char,
+    #[allow(dead_code)]
     pub alien_speed: f32,
 
     // Bullet configuration
@@ -20,6 +21,7 @@ pub struct GameConfig {
 
     // Game settings
     pub fps: u32,
+    #[allow(dead_code)]
     pub initial_lives: u8,
 }
 
@@ -42,6 +44,7 @@ impl Default for GameConfig {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub enum Difficulty {
     Easy,
@@ -54,6 +57,7 @@ impl GameConfig {
         Self::default()
     }
 
+    #[allow(dead_code)]
     pub fn with_difficulty(&mut self, difficulty: Difficulty) -> &mut Self {
         match difficulty {
             Difficulty::Easy => {
