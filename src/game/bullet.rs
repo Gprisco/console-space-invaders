@@ -23,7 +23,7 @@ impl Bullet {
     }
 
     pub fn is_out_of_bounds(&self, height: u16) -> bool {
-        self.y < 0.0 || self.y >= height as f32
+        self.y < 0.0 || self.y >= f32::from(height)
     }
 }
 

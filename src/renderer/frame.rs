@@ -56,8 +56,7 @@ impl Frame {
 
     pub(super) fn cell(&self, x: u16, y: u16) -> Cell {
         self.index(x, y)
-            .map(|index| self.cells[index])
-            .unwrap_or(Cell::Blank)
+            .map_or(Cell::Blank, |index| self.cells[index])
     }
 
     fn index(&self, x: u16, y: u16) -> Option<usize> {

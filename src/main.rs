@@ -11,7 +11,7 @@ use std::time::Duration;
 
 fn main() -> std::io::Result<()> {
     let config = config::GameConfig::new();
-    let frame_time = Duration::from_millis(1000 / config.fps.max(1) as u64);
+    let frame_time = Duration::from_millis(1000 / u64::from(config.fps.max(1)));
     let input_handler = TerminalInputHandler::new(CrosstermEventPoller::new());
     let mut renderer = Renderer::new(config.window_width, config.window_height)?;
     let mut game_state = GameState::new(config);

@@ -28,8 +28,8 @@ pub struct GameState {
 impl GameState {
     pub fn new(config: GameConfig) -> Self {
         let player = Player::new(
-            config.window_width as f32 / 2.0,
-            config.window_height as f32 - 2.0,
+            f32::from(config.window_width) / 2.0,
+            f32::from(config.window_height) - 2.0,
             config.player_symbol,
         );
 
@@ -118,7 +118,7 @@ impl GameState {
         self.player.x = self
             .player
             .x
-            .clamp(0.0, self.config.window_width as f32 - 1.0);
+            .clamp(0.0, f32::from(self.config.window_width) - 1.0);
     }
 }
 
@@ -127,8 +127,8 @@ fn spawn_grid(config: &GameConfig) -> Vec<Alien> {
     for row in 0..config.alien_rows {
         for col in 0..config.alien_columns {
             aliens.push(Alien::new(
-                (col * 2 + 2) as f32,
-                (row * 2 + 1) as f32,
+                f32::from(col * 2 + 2),
+                f32::from(row * 2 + 1),
                 config.alien_symbol,
             ));
         }
