@@ -296,6 +296,7 @@ mod tests {
     fn bullet_destroying_alien_scores_ten() {
         let mut config = GameConfig::new();
         config.alien_speed = 0.0;
+        config.bullet_speed = 1.0;
         config.alien_fire_interval = u32::MAX;
         let mut state = GameState::new(config);
         state.player.x = state.aliens[0].x;
@@ -333,6 +334,7 @@ mod tests {
     #[test]
     fn aliens_advance_sideways_each_tick() {
         let mut config = GameConfig::new();
+        config.alien_speed = 0.5;
         config.alien_fire_interval = u32::MAX;
         let mut state = GameState::new(config);
         let before: Vec<f32> = state.aliens.iter().map(|alien| alien.x).collect();
