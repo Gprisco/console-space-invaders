@@ -12,8 +12,10 @@ pub struct GameConfig {
     pub alien_rows: u16,
     pub alien_columns: u16,
     pub alien_symbol: char,
-    #[allow(dead_code)]
     pub alien_speed: f32,
+    pub alien_bullet_symbol: char,
+    pub alien_fire_interval: u32,
+    pub max_alien_bullets: usize,
 
     // Bullet configuration
     pub bullet_symbol: char,
@@ -21,7 +23,6 @@ pub struct GameConfig {
 
     // Game settings
     pub fps: u32,
-    #[allow(dead_code)]
     pub initial_lives: u8,
 }
 
@@ -35,9 +36,12 @@ impl Default for GameConfig {
             alien_rows: 3,
             alien_columns: 8,
             alien_symbol: '👾',
-            alien_speed: 0.5,
+            alien_speed: 0.2,
+            alien_bullet_symbol: '!',
+            alien_fire_interval: 60,
+            max_alien_bullets: 3,
             bullet_symbol: '|',
-            bullet_speed: 1.0,
+            bullet_speed: 0.5,
             fps: 60,
             initial_lives: 3,
         }

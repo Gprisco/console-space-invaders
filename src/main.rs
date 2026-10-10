@@ -34,6 +34,14 @@ fn render(renderer: &mut Renderer, game: &GameState) -> std::io::Result<()> {
     renderer.clear();
     renderer.draw_str(0, 0, &format!("Score: {}", game.score), Color::White);
 
+    // Each ❤️ renders two cells wide in the terminal but counts as one
+    // column for the frame buffer, so space hearts two cells apart.
+    let lives = usize::from(game.lives);
+    for i in 0..lives {
+        let x = renderer.width().saturating_sub((lives - i) as u16 * 2);
+        renderer.draw_str(x, 0, "❤️", Color::Red);
+    }
+
     for alien in &game.aliens {
         if alien.alive {
             renderer.draw_char(alien.x as u16, alien.y as u16, alien.symbol, Color::Red);
