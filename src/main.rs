@@ -8,6 +8,7 @@ use game::GameState;
 use input::{CrosstermEventPoller, GameInput, Input, TerminalInputHandler};
 use renderer::Renderer;
 use std::time::Duration;
+use unicode_width::UnicodeWidthStr;
 
 fn main() -> std::io::Result<()> {
     let config = config::GameConfig::new();
@@ -33,6 +34,13 @@ fn main() -> std::io::Result<()> {
 fn render(renderer: &mut Renderer, game: &GameState) -> std::io::Result<()> {
     renderer.clear();
     renderer.draw_str(0, 0, &format!("Score: {}", game.score), Color::White);
+
+    let lives_text = "❤️".repeat(usize::from(game.lives));
+    if !lives_text.is_empty() {
+        let offset = UnicodeWidthStr::width(lives_text.as_str()) as u16;
+        let x = renderer.width().saturating_sub(offset);
+        renderer.draw_str(x, 0, &lives_text, Color::Red);
+    }
 
     for alien in &game.aliens {
         if alien.alive {

@@ -19,3 +19,11 @@ _Avoid_: level, stage
 **Playfield**:
 The rectangular region of the terminal where the game is rendered and the game takes place.
 _Avoid_: screen, window
+
+**Bullet**:
+A shot travelling vertically across the Playfield; a Player shot moves upward to destroy Aliens, an Alien shot moves downward to strike the Player.
+_Avoid_: missile, projectile, shot
+
+**Lives**:
+The number of hits the Player can survive; each Alien shot that strikes the Player removes one life, and losing all lives ends the game.
+_Avoid_: health, HP

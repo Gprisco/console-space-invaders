@@ -3,7 +3,6 @@ pub struct Alien {
     pub x: f32,
     pub y: f32,
     pub symbol: char,
-    #[allow(dead_code)]
     pub direction: f32, // 1.0 for right, -1.0 for left
     pub alive: bool,
 }
@@ -19,12 +18,10 @@ impl Alien {
         }
     }
 
-    #[allow(dead_code)]
     pub fn update(&mut self, speed: f32) {
         self.x += speed * self.direction;
     }
 
-    #[allow(dead_code)]
     pub fn reverse_direction(&mut self, drop_amount: f32) {
         self.direction *= -1.0;
         self.y += drop_amount;

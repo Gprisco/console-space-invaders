@@ -25,6 +25,10 @@ impl Bullet {
     pub fn is_out_of_bounds(&self, height: u16) -> bool {
         self.y < 0.0 || self.y >= f32::from(height)
     }
+
+    pub fn is_alien(&self) -> bool {
+        self.velocity > 0.0
+    }
 }
 
 #[cfg(test)]
